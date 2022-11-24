@@ -70,7 +70,7 @@ class App3 {
   static get MATERIAL_PARAM() {
     return {
       color: 0xf7c7a5,
-      // flatShading: true,
+      flatShading: true,
     };
   }
   /**
@@ -212,7 +212,6 @@ class App3 {
     const createGeometry = () => {
       // 初期のトーラス
       this.geometry = new THREE.TorusGeometry(2, 0.7, 20, 100);
-      // this.geometry = new THREE.ConeGeometry( 2, 5, 50 );
       this.geometry.morphAttributes.position = [];
 
       // geometryの元のposition(頂点)
@@ -233,7 +232,9 @@ class App3 {
         let v = y * Math.PI;
 
         // ねじれを生成する。
+        // 縦長にする
         vertex.set(x * 1.5, y / 1.5, z);
+        // ねじれを加える
         vertex
           .applyAxisAngle(direction, (Math.PI * x) / 2)
           .toArray(twistPositions, twistPositions.length);
