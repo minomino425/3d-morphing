@@ -229,28 +229,19 @@ class App3 {
         let x = positionAttribute.getX(i);
         let y = positionAttribute.getY(i);
         let z = positionAttribute.getZ(i);
-        let u = x * 4.0 * Math.PI;
-        let v = y * 2.0 * Math.PI;
-
-        // ねじれを生成する。
-        vertex.set(x * 1.5, y / 1.5, z);
-        vertex
-          .applyAxisAngle(direction, (Math.PI * x) / 2)
-          .toArray(twistPositions, twistPositions.length);
-
-        u = -x * 2.0 * Math.PI;
-        v = y * Math.PI;
-
+        let u = -x * 2.0 * Math.PI;
+        let v = y * Math.PI;
         // 球体を生成する。
         spherePositions.push(
           (x = 2.5 * Math.sin(u) * Math.sin(v)),
           (y = 2.5 * Math.cos(u) * Math.sin(v)),
           (z = 2.5 * Math.cos(v))
         );
-
-        // // 頂点ベクトルを正規化して、球形の頂点にする
-        // const spheredVertex = vertex.normalize().multiplyScalar(3);
-        // spherePositions.push(spheredVertex.x, spheredVertex.y, spheredVertex.z);
+        // ねじれを生成する。
+        vertex.set(x * 1.5, y / 1.5, z);
+        vertex
+          .applyAxisAngle(direction, (Math.PI * x) / 2)
+          .toArray(twistPositions, twistPositions.length);
       }
 
       this.geometry.morphAttributes.position[0] =
