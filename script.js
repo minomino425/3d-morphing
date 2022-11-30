@@ -243,7 +243,7 @@ class App3 {
         spherePositions.push(
           (x = 2.5 * Math.sin(u) * Math.sin(v)),
           (y = 2.5 * Math.cos(u) * Math.sin(v)),
-          (z = 2.5 * Math.cos(v))
+          (z = 2.5 * Math.sin(v))
         );
       }
 
