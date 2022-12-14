@@ -109,8 +109,8 @@ class App3 {
     this.mesh; // グループ
     this.texture; // テクスチャ
     this.animationParam = {
-      value01: 0,
-      value02: 0,
+      twist01: 0,
+      twist02: 0,
     };
 
     // 再帰呼び出しのための this 固定
@@ -216,8 +216,8 @@ class App3 {
 
       // geometryの元のposition(頂点)
       const positionAttribute = this.geometry.attributes.position;
-      const spherePositions = [];
       const twistPositions = [];
+      const twist02Positions = [];
 
       const direction = new THREE.Vector3(1, 0, 0);
       const vertex = new THREE.Vector3();
@@ -228,29 +228,22 @@ class App3 {
         let x = positionAttribute.getX(i);
         let y = positionAttribute.getY(i);
         let z = positionAttribute.getZ(i);
-        let u = -x * 2.0 * Math.PI;
-        let v = y * Math.PI;
 
-        // ねじれを生成する。
         // 縦長にする
         vertex.set(x * 1.5, y / 1.5, z);
-        // ねじれを加える
         vertex
           .applyAxisAngle(direction, (Math.PI * x) / 2)
           .toArray(twistPositions, twistPositions.length);
 
-        // 球体を生成する。
-        spherePositions.push(
-          (x = 2.5 * Math.sin(u) * Math.sin(v)),
-          (y = 2.5 * Math.cos(u) * Math.sin(v)),
-          (z = 2.5 * Math.sin(v))
-        );
+        vertex
+          .applyAxisAngle(direction, (Math.PI * x) / 2)
+          .toArray(twist02Positions, twist02Positions.length);
       }
 
       this.geometry.morphAttributes.position[0] =
-        new THREE.Float32BufferAttribute(spherePositions, 3);
-      this.geometry.morphAttributes.position[1] =
         new THREE.Float32BufferAttribute(twistPositions, 3);
+      this.geometry.morphAttributes.position[1] =
+        new THREE.Float32BufferAttribute(twist02Positions, 3);
 
       return this.geometry;
     };
@@ -274,21 +267,16 @@ class App3 {
       yoyo: true,
     });
     tl.to(this.animationParam, {
-      value01: 0,
-      value02: 0,
-      duration: 0,
+      twist01: 0,
+      twist02: 0,
     })
       .to(this.animationParam, {
-        value01: 1,
-        value02: 0,
+        twist01: 1,
+        twist02: 0,
       })
       .to(this.animationParam, {
-        value01: 0,
-        value02: 1,
-      })
-      .to(this.animationParam, {
-        value01: 0,
-        value02: 0,
+        twist01: 0,
+        twist02: 1,
       });
   }
   /**
@@ -298,8 +286,8 @@ class App3 {
     requestAnimationFrame(this.render);
     this.controls.update();
     this.mesh.rotation.y += 0.01;
-    this.mesh.morphTargetInfluences[0] = this.animationParam.value01;
-    this.mesh.morphTargetInfluences[1] = this.animationParam.value02;
+    this.mesh.morphTargetInfluences[0] = this.animationParam.twist01;
+    this.mesh.morphTargetInfluences[1] = this.animationParam.twist02;
     this.renderer.render(this.scene, this.camera);
   }
 }
